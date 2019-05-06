@@ -1,20 +1,18 @@
 
 using System;
 using System.Collections;
-using System.Data;
-using System.IO;
-using System.Reflection;
+using System.Collections.Specialized;
 using System.Configuration;
-using IBatisNet.DataMapper.Configuration;
-using log4net;
-
-using NUnit.Framework;
+using System.IO;
 
 using IBatisNet.Common; // DataSource definition
 using IBatisNet.Common.Utilities; // ScriptRunner definition
-using IBatisNet.DataMapper; // SqlMap API
+using IBatisNet.DataMapper.Configuration;
 using IBatisNet.DataMapper.Test.Domain;
-using System.Collections.Specialized;
+
+using log4net;
+
+using NUnit.Framework;
 
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
@@ -48,7 +46,7 @@ namespace IBatisNet.DataMapper.Test.NUnit.SqlMapTests
             ScriptDirectory = Path.Combine(Path.Combine(Path.Combine(Path.Combine(Resources.ApplicationBase, ".."), ".."), "Scripts"),
                 ConfigurationManager.AppSettings["database"]) + Path.DirectorySeparatorChar;
 #else
-            ScriptDirectory = Path.Combine(Path.Combine(Path.Combine(Path.Combine(Resources.ApplicationBase, ".."), ".."), "Scripts"), 
+            ScriptDirectory = Path.Combine(Path.Combine(Path.Combine(Path.Combine(Resources.ApplicationBase, ".."), ".."), "Scripts"),
                 ConfigurationSettings.AppSettings["database"]) + Path.DirectorySeparatorChar;
 #endif
         }
@@ -56,7 +54,7 @@ namespace IBatisNet.DataMapper.Test.NUnit.SqlMapTests
         /// <summary>
         /// Initialize an sqlMap
         /// </summary>
-        [TestFixtureSetUp]
+        [SetUp]
         protected virtual void SetUpFixture()
         {
             //DateTime start = DateTime.Now;
@@ -71,11 +69,11 @@ namespace IBatisNet.DataMapper.Test.NUnit.SqlMapTests
             string fileName = "sqlmap" + "_" + ConfigurationManager.AppSettings["database"] + "_" + ConfigurationManager.AppSettings["providerType"] + ".config";
 #else
             NameValueCollection properties = new NameValueCollection();
-            properties.Add("collection2Namespace","IBatisNet.DataMapper.Test.Domain.LineItemCollection, IBatisNet.DataMapper.Test");
+            properties.Add("collection2Namespace", "IBatisNet.DataMapper.Test.Domain.LineItemCollection, IBatisNet.DataMapper.Test");
             properties.Add("nullableInt", "int");
             builder.Properties = properties;
 
-			string fileName = "sqlmap" + "_" + ConfigurationSettings.AppSettings["database"] + "_" + ConfigurationSettings.AppSettings["providerType"] + ".config";
+            string fileName = "sqlmap" + "_" + ConfigurationSettings.AppSettings["database"] + "_" + ConfigurationSettings.AppSettings["providerType"] + ".config";
 #endif
             try
             {
@@ -114,7 +112,7 @@ namespace IBatisNet.DataMapper.Test.NUnit.SqlMapTests
         /// <summary>
         /// Dispose the SqlMap
         /// </summary>
-        [TestFixtureTearDown]
+        [TearDown]
         protected virtual void TearDownFixture()
         {
             sqlMap = null;

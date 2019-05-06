@@ -1,5 +1,6 @@
 
 using System.Collections;
+
 #if dotnet2
 using System.Collections.Generic;
 #endif
@@ -8,7 +9,6 @@ using IBatisNet.DataMapper.Test.Domain;
 using NUnit.Framework;
 //using NUnit.Framework.SyntaxHelpers;
 
-using Category=IBatisNet.DataMapper.Test.Domain.Petshop.Category;
 
 namespace IBatisNet.DataMapper.Test.NUnit.SqlMapTests
 {
@@ -23,7 +23,7 @@ namespace IBatisNet.DataMapper.Test.NUnit.SqlMapTests
         /// <summary>
         /// SetUp
         /// </summary>
-        [TestFixtureSetUp]
+        [SetUp]
         protected override void SetUpFixture()
         {
             base.SetUpFixture();
@@ -39,7 +39,7 @@ namespace IBatisNet.DataMapper.Test.NUnit.SqlMapTests
         /// <summary>
         /// Dispose the SqlMap
         /// </summary>
-        [TestFixtureTearDown]
+        [TearDown]
         protected override void TearDownFixture()
         {
             InitScript(sqlMap.DataSource, ScriptDirectory + "petstore-drop.sql");
@@ -84,7 +84,7 @@ namespace IBatisNet.DataMapper.Test.NUnit.SqlMapTests
 #endif
 
         [Test]
-        public void TestGroupByWithNullSon() 
+        public void TestGroupByWithNullSon()
         {
             IList list = sqlMap.QueryForList("GetCategories", null);
             Assert.AreEqual(6, list.Count);
@@ -96,9 +96,9 @@ namespace IBatisNet.DataMapper.Test.NUnit.SqlMapTests
             IList list = sqlMap.QueryForList("GetAllCategories", null);
             Assert.AreEqual(5, list.Count);
         }
-        
+
         [Test]
-        public void TestGroupByExtended()  
+        public void TestGroupByExtended()
         {
             IList list = sqlMap.QueryForList("GetAllCategoriesExtended", null);
             Assert.AreEqual(5, list.Count);
@@ -201,7 +201,7 @@ namespace IBatisNet.DataMapper.Test.NUnit.SqlMapTests
             Assert.AreEqual(2, product.GenericItems.Count);
         }
 #endif
-        
+
         [Test]
         public void TestGroupByNull()
         {
@@ -209,7 +209,7 @@ namespace IBatisNet.DataMapper.Test.NUnit.SqlMapTests
             Domain.Petshop.Category cat = (Domain.Petshop.Category)list[0];
             Assert.AreEqual(0, cat.Products.Count);
         }
-        
+
         /// <summary>
         /// Test Select N+1 on Order/LineItem
         /// </summary>
@@ -232,15 +232,15 @@ namespace IBatisNet.DataMapper.Test.NUnit.SqlMapTests
 
             sqlMap.Insert("InsertLineItemPostKey", item);
 
-            
+
             IList list = sqlMap.QueryForList("GetOrderLineItem", null);
 
             Assert.AreEqual(11, list.Count);
-            
+
             order = (Order)list[0];
             Assert.AreEqual(3, order.LineItemsIList.Count);
             Assert.IsNotNull(order.Account);
-            AssertAccount1(order.Account);
+            this.AssertAccount1(order.Account);
 
             order = (Order)list[10];
             Assert.AreEqual(1, order.LineItemsIList.Count);
